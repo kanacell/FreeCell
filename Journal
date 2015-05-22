@@ -1,0 +1,9 @@
+23 Mai 2015 :
+ - Création du projet FreeCell + mise en place du GIT
+ - Création des différentes classes de base + création des différents objets qui seront manipulés :
+    => les Cartes : objet de base
+    => les plateaus : tableaux de Colonnes de Cartes (Colonne <=> classe interne et private aux plateaus)
+    => le stock : tableau de 4 Cartes.
+    => la table : objet qui regroupe 1 stock, 
+                                     1 plateau de jeu de dimension 8 (8 colonnes), 
+                                     1 plateau de rangement de dimension 4 (4 colonnes).
