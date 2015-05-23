@@ -26,4 +26,10 @@ public class Constantes {
 		public static final int nombreCellules = 4;
 		public static final int totalCartes = nombreCartes * nombreFamilles;
 	}
+	
+	public static class Panneau {
+		public static final int zoneDeJeu = 1;
+		public static final int zoneDeRangement = 2;
+	}
+	
 }
