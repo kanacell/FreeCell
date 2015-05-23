@@ -49,6 +49,35 @@ public class Carte {
 	 */
 	
 	/*
+	 * Methodes Public de Carte
+	 */
+	/**
+	 * Methode permettant de savoir si la Carte appelante peut etre posee sur une carte donnee en parametre
+	 * @param otherCarte
+	 * @return vrai si la carte appelante est d'une valeur inferieure de 1 a "otherCarte" ainsi que d'une couleur differente; faux sinon
+	 */
+	public boolean estAlterneeInferieure(Carte otherCarte){
+		boolean alternee;
+		alternee = (this.valeur+1) == otherCarte.getValeur() && !this.couleur.equals(otherCarte.getCouleur());
+		return alternee;
+	}
+	
+	/**
+	 * Methode permettant de savoir si la carte appelante est la consecutive de la carte donnee en parametre
+	 * @param otherCarte
+	 * @return vrai si la carte appelante est d'une valeur inferieure de 1 a "otherCarte" ainsi que de la meme famille; faux sinon.
+	 */
+	public boolean estConsecutive (Carte otherCarte){
+		boolean consecutive;
+		consecutive = (this.valeur+1) == otherCarte.getValeur() && this.famille.equals(otherCarte.getFamille());
+		return consecutive;
+	}
+	
+	/*
+	 * FIN Methodes Public de Carte
+	 */
+	
+	/*
 	 * Methodes "Classiques" d'un objet
 	 */
 	public boolean equals (Carte otherCarte){
@@ -64,4 +93,14 @@ public class Carte {
 		chaine_resultat += this.couleur;
 		return chaine_resultat;
 	}
+	
+	public Carte clone (){
+		Carte renvoi = new Carte();
+		renvoi.valeur = this.valeur;
+		renvoi.famille = this.famille;
+		renvoi.couleur = this.couleur;
+		return renvoi;
+	}
+	
+	
 }

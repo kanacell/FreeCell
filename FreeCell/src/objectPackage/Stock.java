@@ -18,4 +18,15 @@ public class Stock {
 			stock[i] = new Carte();
 		}
 	}
+	
+	/*
+	 * Methodes "Classiques" de l'objet
+	 */
+	public Stock clone(){
+		Stock renvoi = new Stock();
+		for (int i = 0; i < renvoi.stock.length; i++){
+			renvoi.stock[i] = this.stock[i].clone();
+		}
+		return renvoi;
+	}
 }
