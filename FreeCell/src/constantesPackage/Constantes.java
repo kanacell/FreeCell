@@ -9,13 +9,15 @@ public class Constantes {
 			public static final String tre = "tre";
 			public static final String nul = "nul";
 			
-			public static final String[] tabFam = { coe, car, piq, tre };
+			public static final String[] tabFamille = { coe, car, piq, tre };
 		}
 		
 		public static class Couleur {
 			public static final String blanche = "blanche";
 			public static final String rouge = "rouge";
 			public static final String noire = "noire";
+			
+			public static final String[] tabCouleur = { rouge, noire };
 		}
 	}
 	

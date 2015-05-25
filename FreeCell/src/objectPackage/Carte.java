@@ -1,5 +1,7 @@
 package objectPackage;
 
+import java.awt.image.BufferedImage;
+
 import constantesPackage.Constantes;
 
 public class Carte {
@@ -9,14 +11,21 @@ public class Carte {
 	private int valeur;
 	private String famille;
 	private String couleur;
+	BufferedImage imageCarte;
 	
 	/*
-	 * 1 CONSTRUCTEUR
+	 * 2 CONSTRUCTEURS
 	 */
 	public Carte (){
 		valeur = 0;
 		famille = Constantes.Carte.Famille.nul;
 		couleur = Constantes.Carte.Couleur.blanche;
+	}
+	
+	public Carte (int newValeur, String newFamille, String newCouleur){
+		valeur = newValeur;
+		famille = newFamille;
+		couleur = newCouleur;
 	}
 	/*
 	 * FIN CONSTRUCTEURS
@@ -73,6 +82,18 @@ public class Carte {
 		boolean consecutive;
 		consecutive = (this.valeur+1) == otherCarte.getValeur() && this.famille.equals(otherCarte.getFamille());
 		return consecutive;
+	}
+	
+	public boolean estCarteVide (){
+		boolean vide = false;
+		vide = (valeur == 0) && famille.equals(Constantes.Carte.Famille.nul) && couleur.equals(Constantes.Carte.Couleur.blanche);
+		return vide;
+	}
+	
+	public void clear (){
+		valeur = 0;
+		famille = Constantes.Carte.Famille.nul;
+		couleur = Constantes.Carte.Couleur.blanche;
 	}
 	
 	/*

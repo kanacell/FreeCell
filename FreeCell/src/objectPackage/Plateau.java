@@ -2,13 +2,61 @@ package objectPackage;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Random;
+
+import constantesPackage.Constantes;
 
 public class Plateau {
 	private Colonne[] plateau;
+	private Random generateur;
+	private int numeroColonneCourante;
+	private Carte carteCourante;
 	
+	/*
+	 * 1 CONSTRUCTEUR
+	 */
 	public Plateau (int nombreColonnes){
 		plateau = new Colonne[nombreColonnes];
 		instanciation();
+	}
+	/*
+	 * FIN CONSTRUCTEUR
+	 */
+	
+	/*
+	 * 2 ACCESSEURS
+	 */
+	public int getNumeroColonneCourante (){
+		return numeroColonneCourante;
+	}
+	public Carte getCarteCourante (){
+		return carteCourante;
+	}
+	
+	public void setNumeroColonneCourante (int newColonneCourante){
+		numeroColonneCourante = newColonneCourante;
+	}
+	public void setCarteCourante (Carte newCarteCourante){
+		carteCourante = newCarteCourante.clone();
+	}
+	/*
+	 * FIN ACCESSEURS
+	 */
+	
+	/*
+	 * Methodes Public de l'objet
+	 */
+	public void initialisation (int seed, PackCard paquet){
+		generateur = new Random(seed);
+		PackCard packTampon = paquet.clone();
+		int numeroColonne = 0;
+		while ( !packTampon.isEmpty() ){
+			int indice = generateur.nextInt(packTampon.size());
+			plateau[numeroColonne].add(packTampon.get(indice));
+			packTampon.remove(indice);
+			numeroColonne = (numeroColonne+1) % plateau.length;
+		}
+		
 	}
 	
 	/*
@@ -20,6 +68,9 @@ public class Plateau {
 		}
 	}
 	
+	/*
+	 * Methodes "Classiques" de l'objet
+	 */
 	public Plateau clone (){
 		Plateau renvoi = new Plateau(this.plateau.length);
 		for (int i = 0; i < renvoi.plateau.length; i++){
