@@ -1,5 +1,11 @@
 package constantesPackage;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 public class Constantes {
 	public static class Carte {
 		public static class Famille {
@@ -19,6 +25,19 @@ public class Constantes {
 			
 			public static final String[] tabCouleur = { rouge, noire };
 		}
+	
+		public static class Image {
+			public static BufferedImage initImage (String nomImage){
+				BufferedImage imageRetournee = null;
+				String chemin = "ImagesCartes/" + nomImage;
+				try {
+					imageRetournee = ImageIO.read(new File (chemin));
+				} catch (IOException e){
+					System.out.println("aucun fichier de ce nom trouve");
+				}
+				return imageRetournee;
+			}
+		}
 	}
 	
 	public static class Plateau {
@@ -32,6 +51,8 @@ public class Constantes {
 	public static class Panneau {
 		public static final int zoneDeJeu = 1;
 		public static final int zoneDeRangement = 2;
+		public static final int largeurCarte = 60;
+		public static final int hauteurCarte = 90;
 	}
 	
 }

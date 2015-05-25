@@ -15,11 +15,11 @@ public class PackCard extends ArrayList<Carte>{
 	}
 	
 	/*
-	 * Methodes Private de PackCard
+	 * Methodes Public de PackCard
 	 */
-	private void initialisation (){
+	public void initialisation (){
 		for (int i = 0; i < Constantes.Plateau.totalCartes; i++){
-			int valeur = (i+1) % Constantes.Plateau.nombreFamilles;
+			int valeur = i % Constantes.Plateau.nombreCartes + 1;
 			int indiceFamille = i / Constantes.Plateau.nombreCartes;
 			int indiceCouleur = indiceFamille / 2;
 			String famille = Constantes.Carte.Famille.tabFamille[indiceFamille];

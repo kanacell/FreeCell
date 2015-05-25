@@ -9,6 +9,24 @@ public class Stock {
 		stock = new Carte[Constantes.Plateau.nombreCellules];
 		instanciation();
 	}
+	/*
+	 * Methodes Public de Stock
+	 */
+	public int length (){
+		return stock.length;
+	}
+	
+	public Carte getCarteAt (int indice){
+		return stock[indice];
+	}
+	
+	public boolean isEmpty (int indice){
+		return stock[indice].isEmpty();
+	}
+	
+	public void putCarteAt (int indice, Carte otherCarte){
+		stock[indice] = otherCarte.clone();
+	}
 	
 	/*
 	 * Methodes Privates de Stock

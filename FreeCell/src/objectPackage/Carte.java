@@ -26,13 +26,15 @@ public class Carte {
 		valeur = newValeur;
 		famille = newFamille;
 		couleur = newCouleur;
+		String nomImage = valeur + "_" + famille + ".png";
+		imageCarte = Constantes.Carte.Image.initImage(nomImage);
 	}
 	/*
 	 * FIN CONSTRUCTEURS
 	 */
 	
 	/*
-	 * 3 ACCESSEURS
+	 * 4 ACCESSEURS
 	 */
 	public int getValeur (){
 		return valeur;
@@ -43,6 +45,9 @@ public class Carte {
 	public String getCouleur (){
 		return couleur;
 	}
+	public BufferedImage getImage (){
+		return imageCarte;
+	}
 	
 	public void setValeur (int newValeur){
 		valeur = newValeur;
@@ -52,6 +57,9 @@ public class Carte {
 	}
 	public void setCouleur (String newCouleur){
 		couleur = newCouleur;
+	}
+	public void setImage (BufferedImage newImage){
+		imageCarte = newImage;
 	}
 	/*
 	 * FIN ACCESSEURS
@@ -84,7 +92,7 @@ public class Carte {
 		return consecutive;
 	}
 	
-	public boolean estCarteVide (){
+	public boolean isEmpty (){
 		boolean vide = false;
 		vide = (valeur == 0) && famille.equals(Constantes.Carte.Famille.nul) && couleur.equals(Constantes.Carte.Couleur.blanche);
 		return vide;
@@ -94,6 +102,7 @@ public class Carte {
 		valeur = 0;
 		famille = Constantes.Carte.Famille.nul;
 		couleur = Constantes.Carte.Couleur.blanche;
+		imageCarte = null;
 	}
 	
 	/*
@@ -111,8 +120,8 @@ public class Carte {
 	
 	public String toString (){
 		String chaine_resultat = "";
-		chaine_resultat += this.valeur + "\n";
-		chaine_resultat += this.famille + "\n";
+		chaine_resultat += this.valeur + " ";
+		chaine_resultat += this.famille + " ";
 		chaine_resultat += this.couleur;
 		return chaine_resultat;
 	}
@@ -122,6 +131,7 @@ public class Carte {
 		renvoi.valeur = this.valeur;
 		renvoi.famille = this.famille;
 		renvoi.couleur = this.couleur;
+		renvoi.imageCarte = this.imageCarte;
 		return renvoi;
 	}
 }

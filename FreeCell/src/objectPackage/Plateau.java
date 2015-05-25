@@ -59,6 +59,18 @@ public class Plateau {
 		
 	}
 	
+	public int length (){
+		return plateau.length;
+	}
+	
+	public Colonne getColonneAt (int indice){
+		return plateau[indice];
+	}
+	
+	public Carte getLastAt (int indice){
+		return plateau[indice].get(plateau[indice].size()-1);
+	}
+	
 	/*
 	 * Methodes Privates de Plateau
 	 */
@@ -79,10 +91,18 @@ public class Plateau {
 		return renvoi;
 	}
 	
+	public String toString (){
+		String chaine_resultat = "Plateau : \n";
+		for (int i = 0; i < plateau.length; i++){
+			chaine_resultat += plateau[i].toString();
+		}
+		return chaine_resultat;
+	}
+	
 	/*
-	 * Classe Interne privee au plateau
+	 * Classe Interne au plateau
 	 */
-	private class Colonne extends ArrayList<Carte> {
+	public class Colonne extends ArrayList<Carte> {
 		
 		/*
 		 * 1 Constructeur
@@ -97,6 +117,7 @@ public class Plateau {
 			while ( iterateurColonne.hasNext() ){
 				chaine_resultat += iterateurColonne.next().toString() + "; ";
 			}
+			chaine_resultat += "}\n";
 			return chaine_resultat;
 		}
 		

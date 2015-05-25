@@ -29,7 +29,7 @@ public class Fenetre extends JFrame{
 	}
 	
 	public void disposition (){
-		System.out.println("lancement de disposition");
+//		System.out.println("lancement de disposition");
 		JPanel panneau_General = new JPanel();
 		panneau_General.setLayout(new BorderLayout());
 		
@@ -49,6 +49,6 @@ public class Fenetre extends JFrame{
 		
 		add(panneau_General);
 		
-		System.out.println("fin de disposition");
+//		System.out.println("fin de disposition");
 	}
 }
