@@ -8,6 +8,7 @@ public class Engine {
 	Plateau zoneRangement;
 	Stock zoneStockage;
 	
+	
 	public Engine (Stock referenceStockage, Plateau referencePlateau, Plateau referenceRangement){
 		zonePrincipal = referencePlateau;
 		zoneRangement = referenceRangement;
