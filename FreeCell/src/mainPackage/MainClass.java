@@ -24,15 +24,15 @@ public class MainClass implements Runnable{
 		paquet.initialisation();
 		
 		principal.initialisation(0, paquet);
-//		rangement.initialisation(0, paquet);
-//		stockage.test();
+		rangement.initialisation(0, paquet);
+		stockage.test();
 		
 		Engine engi = new Engine (stockage, principal, rangement);
 		
-		System.out.println(principal.toString());
-		
-		Fenetre fen = new Fenetre("Titre", stockage, principal, rangement);
-		fen.disposition();
+//		System.out.println(principal.toString());
+				
+		Fenetre fen = new Fenetre("FreeCell");
+		fen.disposition(engi);
 
 	}
 

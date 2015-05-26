@@ -3,42 +3,32 @@ package graphiquePackage;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.ListIterator;
 
 import javax.swing.JPanel;
 
+import movePackage.Engine;
 import objectPackage.Carte;
 import objectPackage.Plateau;
 import objectPackage.Stock;
 import constantesPackage.Constantes;
 
 public class Panneau extends JPanel{
-	private Stock zoneStockage = null;
-	private Plateau zonePrincipale = null;
-	private Plateau zoneRangement = null;
 	private Graphics2D crayon;
 	private int largeur, hauteur;
 	private int numeroZone;
 	
 	private String dimension = "dimensions : ";
 	
-	/*
-	 * 2 CONSTRUCTEURS
-	 */
-	public Panneau (Plateau referencePlateau, int typeDeZone){
-		numeroZone = typeDeZone;
-		if (typeDeZone == Constantes.Panneau.zoneDeJeu){
-			zonePrincipale = referencePlateau;
-		}
-		else if (typeDeZone == Constantes.Panneau.zoneDeRangement){
-			zoneRangement = referencePlateau;
-		}
-	}
+	private Engine engi;
 	
-	public Panneau (Stock referenceStock){
-		zoneStockage = referenceStock;
-	}	
+	/*
+	 * 1 CONSTRUCTEUR : le Engine + le type de zone du Panneau (stockage, principale, rangement)
+	 */	
+	public Panneau (Engine referenceEngi, int typeDeZone){
+		engi = referenceEngi;
+		numeroZone = typeDeZone;
+	}
 	/*
 	 * FIN CONSTRUCTEURS
 	 */
@@ -52,30 +42,31 @@ public class Panneau extends JPanel{
 		hauteur = getHeight();
 		dimension = largeur + " et " + hauteur;
 		
-		if (zoneStockage != null){
-			dessinerStockage(crayon);
-		}
-		else if (zonePrincipale != null){
-			dessinerZonePrincipale(crayon);
-		}
-		else if (zoneRangement != null){
-			dessinerRangement(crayon);
+		switch (numeroZone){
+		case Constantes.Panneau.zoneDeStockage:
+			dessinerStockage(crayon, engi.getZoneStockage());
+			break;
+		case Constantes.Panneau.zoneDeJeu:
+			dessinerZonePrincipale(crayon, engi.getZonePrincipale());
+			break;
+		case Constantes.Panneau.zoneDeRangement:
+			dessinerRangement(crayon, engi.getZoneRangement());
+			break;
 		}
 	}
 	
 	/*
 	 * Methodes Private de Panneau
 	 */
-	private void dessinerStockage (Graphics2D crayon){
+	private void dessinerStockage (Graphics2D crayon, Stock referenceStockage){
 		crayon.setColor(Color.pink);
 		crayon.fillRect(0, 0, largeur, hauteur);
 		int coordX, coordY;
-		for (int numeroCarte = 0; numeroCarte < zoneStockage.length(); numeroCarte++){
-			crayon.drawRect(15 + numeroCarte*(Constantes.Panneau.largeurCarte+10), 20, Constantes.Panneau.largeurCarte, Constantes.Panneau.hauteurCarte);
+		for (int numeroCarte = 0; numeroCarte < referenceStockage.length(); numeroCarte++){
 			coordX = 15 + numeroCarte*(Constantes.Panneau.largeurCarte + 10);
 			coordY = 20;
-			if ( !zoneStockage.isEmpty(numeroCarte) ){
-				dessinerCarte(crayon, zoneStockage.getCarteAt(numeroCarte), coordX, coordY);
+			if ( !referenceStockage.isEmpty(numeroCarte) ){
+				dessinerCarte(crayon, referenceStockage.getCarteAt(numeroCarte), coordX, coordY);
 			}
 			else {
 				dessinerCarteVide(crayon, coordX, coordY);
@@ -84,17 +75,17 @@ public class Panneau extends JPanel{
 		crayon.drawString(dimension, 10, 10);
 	}
 	
-	private void dessinerZonePrincipale (Graphics2D crayon){
+	private void dessinerZonePrincipale (Graphics2D crayon, Plateau referencePrincipale){
 		crayon.setColor(Color.orange);
 		crayon.fillRect(0, 0, largeur, hauteur);
 		int compteurCarte, coordX, coordY;
-		for (int numeroColonne = 0; numeroColonne < zonePrincipale.length(); numeroColonne++){
+		for (int numeroColonne = 0; numeroColonne < referencePrincipale.length(); numeroColonne++){
 			compteurCarte = 0;
-			ListIterator<Carte> iterateurColonne = zonePrincipale.getColonneAt(numeroColonne).listIterator();
+			ListIterator<Carte> iterateurColonne = referencePrincipale.getColonneAt(numeroColonne).listIterator();
 			while ( iterateurColonne.hasNext() ){
 				coordX = 20 + numeroColonne*(Constantes.Panneau.largeurCarte + 10);
 				coordY = 20 + compteurCarte*20;
-				if ( !zonePrincipale.getColonneAt(numeroColonne).isEmpty() ){
+				if ( !referencePrincipale.getColonneAt(numeroColonne).isEmpty() ){
 					dessinerCarte(crayon, iterateurColonne.next(), coordX, coordY);
 				}
 				else {
@@ -106,15 +97,15 @@ public class Panneau extends JPanel{
 		crayon.drawString(dimension, 10, 10);
 	}
 	
-	private void dessinerRangement (Graphics2D crayon){
+	private void dessinerRangement (Graphics2D crayon, Plateau referenceRangement){
 		crayon.setColor(Color.cyan);
 		crayon.fillRect(0, 0, largeur, hauteur);
 		int coordX, coordY;
-		for (int numeroColonne = 0; numeroColonne < zoneRangement.length(); numeroColonne++){
+		for (int numeroColonne = 0; numeroColonne < referenceRangement.length(); numeroColonne++){
 			coordX = 5 + numeroColonne*(Constantes.Panneau.largeurCarte + 10);
 			coordY = 20;
-			if ( !zoneRangement.getColonneAt(numeroColonne).isEmpty() ){
-				dessinerCarte(crayon, zoneRangement.getLastAt(numeroColonne), coordX, coordY);
+			if ( !referenceRangement.getColonneAt(numeroColonne).isEmpty() ){
+				dessinerCarte(crayon, referenceRangement.getLastAt(numeroColonne), coordX, coordY);
 			}
 			else {
 				dessinerCarteVide(crayon, coordX, coordY);
@@ -123,13 +114,15 @@ public class Panneau extends JPanel{
 		crayon.drawString(dimension, 10, 10);
 	}
 	
-	private void dessinerCarte (Graphics2D crayon, Carte carte, int coordX, int coordY){
+	private void dessinerCarte (Graphics2D crayon, Carte referenceCarte, int coordX, int coordY){
 		crayon.setColor(Color.black);
-		crayon.drawImage(carte.getImage(), coordX, coordY, Constantes.Panneau.largeurCarte, Constantes.Panneau.hauteurCarte, this);
+		crayon.drawImage(referenceCarte.getImage(), coordX, coordY, Constantes.Panneau.largeurCarte, Constantes.Panneau.hauteurCarte, this);
 	}
 	
 	private void dessinerCarteVide (Graphics2D crayon, int coordX, int coordY){
 		crayon.setColor(Color.black);
 		crayon.drawRect(coordX,  coordY, Constantes.Panneau.largeurCarte, Constantes.Panneau.hauteurCarte);
 	}
+
+
 }

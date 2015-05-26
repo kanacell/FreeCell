@@ -49,8 +49,10 @@ public class Constantes {
 	}
 	
 	public static class Panneau {
+		public static final int zoneNulle = -1;
 		public static final int zoneDeJeu = 1;
 		public static final int zoneDeRangement = 2;
+		public static final int zoneDeStockage = 3;
 		public static final int largeurCarte = 60;
 		public static final int hauteurCarte = 90;
 	}
