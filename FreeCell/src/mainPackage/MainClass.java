@@ -4,6 +4,7 @@ import graphiquePackage.Fenetre;
 
 import javax.swing.SwingUtilities;
 
+import movePackage.Engine;
 import objectPackage.PackCard;
 import objectPackage.Plateau;
 import objectPackage.Stock;
@@ -24,6 +25,9 @@ public class MainClass implements Runnable{
 		
 		principal.initialisation(0, paquet);
 //		rangement.initialisation(0, paquet);
+//		stockage.test();
+		
+		Engine engi = new Engine (stockage, principal, rangement);
 		
 		System.out.println(principal.toString());
 		

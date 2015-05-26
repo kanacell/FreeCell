@@ -28,6 +28,12 @@ public class Stock {
 		stock[indice] = otherCarte.clone();
 	}
 	
+	public void test (){
+		for (int numeroCarte = 0; numeroCarte < stock.length; numeroCarte++){
+			stock[numeroCarte] = new Carte(1, Constantes.Carte.Famille.car, Constantes.Carte.Couleur.rouge);
+		}
+	}
+	
 	/*
 	 * Methodes Privates de Stock
 	 */
@@ -46,5 +52,14 @@ public class Stock {
 			renvoi.stock[i] = this.stock[i].clone();
 		}
 		return renvoi;
+	}
+	
+	public String toString(){
+		String chaine_resultat = "Stock : ";
+		for (int numeroCarte = 0; numeroCarte < stock.length; numeroCarte++){
+			chaine_resultat += "| " + stock[numeroCarte].toString() + " ";
+		}
+		chaine_resultat += "|";
+		return chaine_resultat;
 	}
 }

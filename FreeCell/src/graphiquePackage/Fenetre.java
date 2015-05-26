@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import movePackage.Engine;
 import objectPackage.Plateau;
 import objectPackage.Stock;
 import constantesPackage.Constantes;
@@ -28,6 +29,14 @@ public class Fenetre extends JFrame{
 		zoneRangement = referenceRangement;
 	}
 	
+	public Fenetre (String title){
+		super(title);
+		setSize(600, 600);
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+	}
+	
 	public void disposition (){
 //		System.out.println("lancement de disposition");
 		JPanel panneau_General = new JPanel();
@@ -41,6 +50,10 @@ public class Fenetre extends JFrame{
 		Panneau pan_Principal = new Panneau(zonePrincipale, Constantes.Panneau.zoneDeJeu);
 		Panneau pan_Rangement = new Panneau(zoneRangement, Constantes.Panneau.zoneDeRangement);
 		
+		pan_Stockage.addMouseListener(new GestionSouris(zoneStockage));
+		pan_Principal.addMouseListener(new GestionSouris(zonePrincipale, Constantes.Panneau.zoneDeJeu));
+		pan_Rangement.addMouseListener(new GestionSouris(zoneRangement, Constantes.Panneau.zoneDeRangement));
+		
 		panneau_entete.add(pan_Stockage);
 		panneau_entete.add(pan_Rangement);
 		
@@ -50,5 +63,9 @@ public class Fenetre extends JFrame{
 		add(panneau_General);
 		
 //		System.out.println("fin de disposition");
+	}
+
+	public void disposition (Engine engi){
+		
 	}
 }

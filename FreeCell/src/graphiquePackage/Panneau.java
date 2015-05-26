@@ -80,7 +80,6 @@ public class Panneau extends JPanel{
 			else {
 				dessinerCarteVide(crayon, coordX, coordY);
 			}
-			System.out.println("coordX : " + coordX);
 		}
 		crayon.drawString(dimension, 10, 10);
 	}
