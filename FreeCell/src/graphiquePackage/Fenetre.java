@@ -40,11 +40,12 @@ public class Fenetre extends JFrame{
 		Panneau pan_Principal = new Panneau(engi, Constantes.Panneau.zoneDeJeu);
 		Panneau pan_Rangement = new Panneau(engi, Constantes.Panneau.zoneDeRangement);
 		
-		GestionSouris ecouteur_ = new GestionSouris(engi);
+		GestionSouris ecouteur_Pan_Stockage = new GestionSouris(engi, Constantes.Panneau.zoneDeStockage, pan_Stockage);
 		
-		pan_Stockage.addMouseListener(new GestionSouris(engi, engi.getZoneStockage()));
-		pan_Principal.addMouseListener(new GestionSouris(engi, engi.getZonePrincipale(), Constantes.Panneau.zoneDeJeu) );
-		pan_Rangement.addMouseListener(new GestionSouris(engi, engi.getZoneRangement(), Constantes.Panneau.zoneDeRangement) );
+		pan_Stockage.addMouseListener(ecouteur_Pan_Stockage);
+		pan_Stockage.addMouseMotionListener(ecouteur_Pan_Stockage);
+		pan_Principal.addMouseListener(new GestionSouris(engi, Constantes.Panneau.zoneDeJeu, pan_Principal) );
+		pan_Rangement.addMouseListener(new GestionSouris(engi, Constantes.Panneau.zoneDeRangement, pan_Rangement) );
 		
 		panneau_entete.add(pan_Stockage);
 		panneau_entete.add(pan_Rangement);

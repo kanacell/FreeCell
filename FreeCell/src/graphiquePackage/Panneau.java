@@ -17,10 +17,11 @@ public class Panneau extends JPanel{
 	private Graphics2D crayon;
 	private int largeur, hauteur;
 	private int numeroZone;
+	private Engine engi;
+	private int carteSurlignee;
 	
 	private String dimension = "dimensions : ";
 	
-	private Engine engi;
 	
 	/*
 	 * 1 CONSTRUCTEUR : le Engine + le type de zone du Panneau (stockage, principale, rangement)
@@ -28,10 +29,18 @@ public class Panneau extends JPanel{
 	public Panneau (Engine referenceEngi, int typeDeZone){
 		engi = referenceEngi;
 		numeroZone = typeDeZone;
+		carteSurlignee = -1;
 	}
 	/*
 	 * FIN CONSTRUCTEURS
 	 */
+	
+	/*
+	 * ACCESSEURS
+	 */
+	public int getCarteSurlignee (){
+		return carteSurlignee;
+	}
 	
 	/*
 	 * Methode de Dessin du Panneau
@@ -44,15 +53,31 @@ public class Panneau extends JPanel{
 		
 		switch (numeroZone){
 		case Constantes.Panneau.zoneDeStockage:
+			System.out.println("dessin de stockage");
 			dessinerStockage(crayon, engi.getZoneStockage());
 			break;
 		case Constantes.Panneau.zoneDeJeu:
+			System.out.println("dessin de principale");
 			dessinerZonePrincipale(crayon, engi.getZonePrincipale());
 			break;
 		case Constantes.Panneau.zoneDeRangement:
+			System.out.println("dessin de rangement");
 			dessinerRangement(crayon, engi.getZoneRangement());
 			break;
 		}
+	}
+	
+	/*
+	 * Methodes Publics de Panneau
+	 */
+	public void activerContours (int numeroCarte){
+		carteSurlignee = numeroCarte;
+		repaint();
+	}
+	
+	public void desactiverContours (){
+		carteSurlignee = -1;
+		repaint();
 	}
 	
 	/*
@@ -71,6 +96,11 @@ public class Panneau extends JPanel{
 			else {
 				dessinerCarteVide(crayon, coordX, coordY);
 			}
+		}
+		if (carteSurlignee != -1){
+			coordX = 15 + carteSurlignee*(Constantes.Panneau.largeurCarte + 10);
+			coordY = 20;
+			dessinerSurlignage(crayon, coordX, coordY);
 		}
 		crayon.drawString(dimension, 10, 10);
 	}
@@ -124,5 +154,8 @@ public class Panneau extends JPanel{
 		crayon.drawRect(coordX,  coordY, Constantes.Panneau.largeurCarte, Constantes.Panneau.hauteurCarte);
 	}
 
-
+	private void dessinerSurlignage (Graphics2D crayon, int coordX, int coordY){
+		crayon.setColor(Color.black);
+		crayon.drawRect(coordX-1, coordY-1, Constantes.Panneau.largeurCarte+1, Constantes.Panneau.hauteurCarte+1);
+	}
 }

@@ -30,7 +30,7 @@ public class Stock {
 	
 	public void test (){
 		for (int numeroCarte = 0; numeroCarte < stock.length; numeroCarte++){
-			stock[numeroCarte] = new Carte(1, Constantes.Carte.Famille.car, Constantes.Carte.Couleur.rouge);
+			stock[numeroCarte] = new Carte(numeroCarte+1, Constantes.Carte.Famille.car, Constantes.Carte.Couleur.rouge);
 		}
 	}
 	
