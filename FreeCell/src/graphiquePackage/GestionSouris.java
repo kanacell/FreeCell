@@ -17,24 +17,28 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 	private Engine engi;
 	
 	/*
-	 * 2 CONSTRUCTEURS
+	 * 1 CONSTRUCTEUR
 	 */
-	public GestionSouris (Stock referenceStock){
-		panneauStockage = referenceStock;
-	}
-	public GestionSouris (Plateau referencePlateau, int typeDeZone){
-		if (typeDeZone == Constantes.Panneau.zoneDeJeu){
-			panneauZonePrincipale = referencePlateau;
-		}
-		else if (typeDeZone == Constantes.Panneau.zoneDeRangement){
-			panneauRangement = referencePlateau;
-		}
-	}
 	public GestionSouris (Engine referenceEngi){
 		engi = referenceEngi;
 	}
+	public GestionSouris (Engine referenceEngi, Stock referenceStock){
+		engi = referenceEngi;
+		panneauStockage = referenceStock;
+	}
+	public GestionSouris (Engine referenceEngi, Plateau referencePlateau, int typePlateau){
+		engi = referenceEngi;
+		switch (typePlateau){
+		case Constantes.Panneau.zoneDeJeu:
+			panneauZonePrincipale = referencePlateau;
+			break;
+		case Constantes.Panneau.zoneDeRangement:
+			panneauRangement = referencePlateau;
+			break;
+		}
+	}
 	/*
-	 * FIN CONSTRUCTEURS
+	 * FIN CONSTRUCTEUR
 	 */
 
 	
@@ -44,7 +48,7 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 		if (panneauStockage != null){
 			System.out.println("pressed sur panneau de stockage");
 			
-			if ( engi.getTypePanneauDepart() == Constantes.Panneau.zoneNulle ){
+			if ( engi.getTypePanneauDepart() != Constantes.Panneau.zoneDeStockage ){
 				engi.setTypePanneauDepart(Constantes.Panneau.zoneDeStockage);
 			}
 			else {
@@ -56,7 +60,7 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 		else if (panneauZonePrincipale != null){
 			System.out.println("pressed sur panneau de zone principale");
 			
-			if ( engi.getTypePanneauDepart() == Constantes.Panneau.zoneNulle ){
+			if ( engi.getTypePanneauDepart() != Constantes.Panneau.zoneDeJeu ){
 				engi.setTypePanneauDepart(Constantes.Panneau.zoneDeJeu);
 			}
 			else {
@@ -68,7 +72,7 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 		else if (panneauRangement != null){
 			System.out.println("pressed sur panneau de rangement");
 			
-			if ( engi.getTypePanneauDepart() == Constantes.Panneau.zoneNulle ){
+			if ( engi.getTypePanneauDepart() != Constantes.Panneau.zoneDeRangement ){
 				engi.setTypePanneauDepart(Constantes.Panneau.zoneDeRangement);
 			}
 			else {
