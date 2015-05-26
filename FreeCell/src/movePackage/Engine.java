@@ -72,7 +72,10 @@ public class Engine {
 	 * FIN ACCESSEURS
 	 */
 	
-	public boolean deplacementInterne (){
+	/*
+	 * Methodes Public de Engine
+	 */
+	public boolean deplacement (){
 		boolean deplacement = false;
 		
 		return deplacement;

@@ -38,13 +38,29 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 		switch (typeDeZone){
 		case Constantes.Panneau.zoneDeStockage:
 			System.out.println("pressed sur panneau de stockage");
+			Stock referenceStockage = engi.getZoneStockage();
 			
 			int numeroCarte = estSurStock(clic);
 			if (numeroCarte != -1){
-				System.out.println("carte : " + engi.getZoneStockage().getCarteAt(numeroCarte).toString() );
-				engi.setCarteCourante(engi.getZoneStockage().getCarteAt(numeroCarte));
+//				if (pan.getCarteSelectionnee() == -1){
+					pan.selectionnerCarte(numeroCarte);
+//				}
+				System.out.println("carte : " + referenceStockage.getCarteAt(numeroCarte).toString() );
+				engi.setCarteCourante(referenceStockage.getCarteAt(numeroCarte).clone());
+				engi.setTypePanneauDepart(Constantes.Panneau.zoneDeStockage);
 			}
-			if ( engi.getTypePanneauDepart() != Constantes.Panneau.zoneDeStockage ){
+			else {
+				if (pan.getCarteSelectionnee() != -1){
+					pan.deselectionnerCarte();
+					engi.getCarteCourante().clear();
+				}
+			}
+			
+			
+			
+			
+			
+			if ( engi.getTypePanneauDepart() == -1 ){
 				engi.setTypePanneauDepart(Constantes.Panneau.zoneDeStockage);
 			}
 			else {
@@ -55,6 +71,7 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 			break;
 		case Constantes.Panneau.zoneDeJeu:
 			System.out.println("pressed sur panneau de zone principale");
+			Plateau referencePrincipale = engi.getZonePrincipale();
 			
 			if ( engi.getTypePanneauDepart() != Constantes.Panneau.zoneDeJeu ){
 				engi.setTypePanneauDepart(Constantes.Panneau.zoneDeJeu);
@@ -67,6 +84,7 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 			break;
 		case Constantes.Panneau.zoneDeRangement:
 			System.out.println("pressed sur panneau de rangement");
+			Plateau referenceRangement = engi.getZoneRangement();
 			
 			if ( engi.getTypePanneauDepart() != Constantes.Panneau.zoneDeRangement ){
 				engi.setTypePanneauDepart(Constantes.Panneau.zoneDeRangement);

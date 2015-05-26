@@ -19,6 +19,7 @@ public class Panneau extends JPanel{
 	private int numeroZone;
 	private Engine engi;
 	private int carteSurlignee;
+	private int carteSelectionnee;
 	
 	private String dimension = "dimensions : ";
 	
@@ -30,6 +31,7 @@ public class Panneau extends JPanel{
 		engi = referenceEngi;
 		numeroZone = typeDeZone;
 		carteSurlignee = -1;
+		carteSelectionnee = -1;
 	}
 	/*
 	 * FIN CONSTRUCTEURS
@@ -40,6 +42,9 @@ public class Panneau extends JPanel{
 	 */
 	public int getCarteSurlignee (){
 		return carteSurlignee;
+	}
+	public int getCarteSelectionnee (){
+		return carteSelectionnee;
 	}
 	
 	/*
@@ -53,15 +58,15 @@ public class Panneau extends JPanel{
 		
 		switch (numeroZone){
 		case Constantes.Panneau.zoneDeStockage:
-			System.out.println("dessin de stockage");
+//			System.out.println("dessin de stockage");
 			dessinerStockage(crayon, engi.getZoneStockage());
 			break;
 		case Constantes.Panneau.zoneDeJeu:
-			System.out.println("dessin de principale");
+//			System.out.println("dessin de principale");
 			dessinerZonePrincipale(crayon, engi.getZonePrincipale());
 			break;
 		case Constantes.Panneau.zoneDeRangement:
-			System.out.println("dessin de rangement");
+//			System.out.println("dessin de rangement");
 			dessinerRangement(crayon, engi.getZoneRangement());
 			break;
 		}
@@ -74,9 +79,17 @@ public class Panneau extends JPanel{
 		carteSurlignee = numeroCarte;
 		repaint();
 	}
-	
 	public void desactiverContours (){
 		carteSurlignee = -1;
+		repaint();
+	}
+	
+	public void selectionnerCarte (int numeroCarte){
+		carteSelectionnee = numeroCarte;
+		repaint();
+	}
+	public void deselectionnerCarte (){
+		carteSelectionnee = -1;
 		repaint();
 	}
 	
@@ -97,10 +110,15 @@ public class Panneau extends JPanel{
 				dessinerCarteVide(crayon, coordX, coordY);
 			}
 		}
-		if (carteSurlignee != -1){
+		if ( carteSurlignee != -1 ){
 			coordX = 15 + carteSurlignee*(Constantes.Panneau.largeurCarte + 10);
 			coordY = 20;
 			dessinerSurlignage(crayon, coordX, coordY);
+		}
+		if ( carteSelectionnee != -1 ){
+			coordX = 15 + carteSelectionnee*(Constantes.Panneau.largeurCarte + 10);
+			coordY = 20;
+			dessinerSelection(crayon, coordX, coordY);
 		}
 		crayon.drawString(dimension, 10, 10);
 	}
@@ -155,6 +173,11 @@ public class Panneau extends JPanel{
 	}
 
 	private void dessinerSurlignage (Graphics2D crayon, int coordX, int coordY){
+		crayon.setColor(Color.black);
+		crayon.drawRect(coordX-1, coordY-1, Constantes.Panneau.largeurCarte+1, Constantes.Panneau.hauteurCarte+1);
+	}
+	
+	private void dessinerSelection (Graphics2D crayon, int coordX, int coordY){
 		crayon.setColor(Color.black);
 		crayon.drawRect(coordX-1, coordY-1, Constantes.Panneau.largeurCarte+1, Constantes.Panneau.hauteurCarte+1);
 	}
