@@ -16,7 +16,7 @@ public class Fenetre extends JFrame{
 	 */
 	public Fenetre (String title){
 		super(title);
-		setSize(600, 600);
+		setSize(800, 800);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -54,5 +54,12 @@ public class Fenetre extends JFrame{
 		panneau_General.add(pan_Principal, BorderLayout.CENTER);
 		
 		add(panneau_General);
+	}
+	
+	
+	public void disposition_v2 (Engine referenceEngi){
+		Panneau_v2 panneauDeJeu = new Panneau_v2 (referenceEngi);
+		
+		add(panneauDeJeu);
 	}
 }

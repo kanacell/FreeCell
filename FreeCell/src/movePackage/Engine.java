@@ -23,7 +23,6 @@ public class Engine {
 		typePanneauDepart = -1;
 		carteCourante = new Carte();
 	}
-	
 	/*
 	 * FIN CONSTRUCTEURS
 	 */

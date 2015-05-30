@@ -16,7 +16,7 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 	private Engine engi;
 	
 	/*
-	 * 1 CONSTRUCTEUR
+	 * 2 CONSTRUCTEUR
 	 */
 	public GestionSouris (Engine referenceEngi){
 		engi = referenceEngi;
@@ -62,13 +62,20 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 			Plateau referencePrincipale = engi.getZonePrincipale();
 			int numeroColonne = estSurPrincipale(clic);
 			
-			if ( engi.getTypePanneauDepart() == Constantes.Panneau.zoneNulle ){
+			if (numeroColonne != -1){
+				pan.selectionnerColonne(numeroColonne);
+				engi.setNumeroColonneCourante(numeroColonne);
 				engi.setTypePanneauDepart(Constantes.Panneau.zoneDeJeu);
 			}
 			else {
+				if (pan.getColonneSelectionnee() != -1){
+					pan.deselectionnerColonne();
+					engi.setNumeroColonneCourante(-1);
+					engi.setTypePanneauDepart(Constantes.Panneau.zoneNulle);
+				}
 			}
 			
-			System.out.println(engi.getZonePrincipale().toString());
+//			System.out.println(engi.getZonePrincipale().toString());
 			break;
 		case Constantes.Panneau.zoneDeRangement:
 			System.out.println("\tpressed sur panneau de rangement");
@@ -105,7 +112,12 @@ public class GestionSouris implements MouseListener, MouseMotionListener{
 			}
 			break;
 		case Constantes.Panneau.zoneDeJeu:
-			
+			int numeroColonne = estSurPrincipale(clic);
+			if (numeroColonne != -1){
+//				if (){
+					
+//				}
+			}
 			break;
 		case Constantes.Panneau.zoneDeRangement:
 			

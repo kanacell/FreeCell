@@ -30,10 +30,13 @@ public class MainClass implements Runnable{
 		Engine engi = new Engine (stockage, principal, rangement);
 		
 //		System.out.println(principal.toString());
+		System.out.println(rangement.toString());
 				
 		Fenetre fen = new Fenetre("FreeCell");
-		fen.disposition(engi);
-
+//		fen.disposition(engi);
+		
+		fen.disposition_v2(engi);
+		
 	}
 
 }
