@@ -139,7 +139,6 @@ public class Panneau extends JPanel{
 		}
 		crayon.drawString(dimension, 10, 10);
 	}
-	
 	private void dessinerZonePrincipale (Graphics2D crayon, Plateau referencePrincipale){
 		crayon.setColor(Color.orange);
 		crayon.fillRect(0, 0, largeur, hauteur);
@@ -163,8 +162,7 @@ public class Panneau extends JPanel{
 			
 		}
 		crayon.drawString(dimension, 10, 10);
-	}
-	
+	}	
 	private void dessinerRangement (Graphics2D crayon, Plateau referenceRangement){
 		crayon.setColor(Color.cyan);
 		crayon.fillRect(0, 0, largeur, hauteur);
@@ -181,22 +179,18 @@ public class Panneau extends JPanel{
 		}
 		crayon.drawString(dimension, 10, 10);
 	}
-	
 	private void dessinerCarte (Graphics2D crayon, Carte referenceCarte, int coordX, int coordY){
 		crayon.setColor(Color.black);
 		crayon.drawImage(referenceCarte.getImage(), coordX, coordY, Constantes.Panneau.largeurCarte, Constantes.Panneau.hauteurCarte, this);
 	}
-	
 	private void dessinerCarteVide (Graphics2D crayon, int coordX, int coordY){
 		crayon.setColor(Color.black);
 		crayon.drawRect(coordX,  coordY, Constantes.Panneau.largeurCarte, Constantes.Panneau.hauteurCarte);
 	}
-
 	private void dessinerSurlignage (Graphics2D crayon, int coordX, int coordY){
 		crayon.setColor(Color.black);
 		crayon.drawRect(coordX-1, coordY-1, Constantes.Panneau.largeurCarte+1, Constantes.Panneau.hauteurCarte+1);
 	}
-	
 	private void dessinerSelection (Graphics2D crayon, int coordX, int coordY){
 		crayon.setColor(Color.black);
 		crayon.drawRect(coordX-1, coordY-1, Constantes.Panneau.largeurCarte+1, Constantes.Panneau.hauteurCarte+1);

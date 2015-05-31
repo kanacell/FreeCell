@@ -22,8 +22,10 @@ public class Panneau_v2 extends JComponent{
 	/*
 	 * Attributs de Selection
 	 */
-	private int carteSurlignee;
-	private int carteSelectionnee;
+	private int stockageSurlignee;
+	private int stockageSelectionnee;
+	private int rangementSurlignee;
+	private int rangementSelectionnee;
 	private int colonneSurlignee;
 	private int colonneSelectionnee;
 	/*
@@ -40,6 +42,8 @@ public class Panneau_v2 extends JComponent{
 	private int ecartYsurCartes; // = 25;
 	private int ecartXPlateau; // = 15;
 	private int ecartYPlateau; // = 20;
+	private int coordXCarteStockSelectionnee, coordYCarteStockSelectionnee;
+	private int coordXColonneSelectionnee, coordYColonneSelectionnee;
 	/*
 	 * FIN Attributs d'Entiers Graphiques
 	 */
@@ -52,8 +56,12 @@ public class Panneau_v2 extends JComponent{
 	 */	
 	public Panneau_v2 (Engine referenceEngi){
 		engi = referenceEngi;
-		carteSurlignee = -1;
-		carteSelectionnee = -1;
+		stockageSurlignee = -1;
+		stockageSelectionnee = -1;
+		rangementSurlignee = -1;
+		rangementSelectionnee = -1;
+		colonneSurlignee = -1;
+		colonneSelectionnee = -1;
 		
 		GestionSouris_v2 ecouteur = new GestionSouris_v2(this, referenceEngi);
 		addMouseListener(ecouteur);
@@ -67,10 +75,10 @@ public class Panneau_v2 extends JComponent{
 	 * ACCESSEURS
 	 */
 	public int getCarteSurlignee (){
-		return carteSurlignee;
+		return stockageSurlignee;
 	}
 	public int getCarteSelectionnee (){
-		return carteSelectionnee;
+		return stockageSelectionnee;
 	}
 	
 	public int getColonneSurlignee (){
@@ -105,6 +113,19 @@ public class Panneau_v2 extends JComponent{
 	public int getHauteurCarte (){
 		return hauteurCarte;
 	}
+	
+	public void setCoordXCarteSelectionnee (int newCoordXCarteSelection){
+		coordXCarteStockSelectionnee = newCoordXCarteSelection;
+	}
+	public void setCoordYCarteSelectionnee (int newCoordYCarteSelection){
+		coordYCarteStockSelectionnee = newCoordYCarteSelection;
+	}
+	public void setCoordXColonneSelectionnee (int newCoordXColonneSelectionnee){
+		coordXColonneSelectionnee = newCoordXColonneSelectionnee;
+	}
+	public void setCoordYColonneSelectionnee (int newCoordYColonneSelectionnee){
+		coordYColonneSelectionnee = newCoordYColonneSelectionnee;
+	}
 	/*
 	 * FIN ACCESSEURS
 	 */
@@ -133,13 +154,10 @@ public class Panneau_v2 extends JComponent{
 		
 		colorierFond(crayon);
 		
-		System.out.println("dessin de stockage");
 		dessinerStockage(crayon, engi.getZoneStockage());
 
-		System.out.println("dessin de rangement");
 		dessinerRangement(crayon, engi.getZoneRangement());
 		
-		System.out.println("dessin de principale");
 		dessinerZonePrincipale(crayon, engi.getZonePrincipale());
 		
 	}
@@ -148,25 +166,37 @@ public class Panneau_v2 extends JComponent{
 	 * Methodes Publics de Panneau
 	 */
 	public void activerContours (int numeroCarte){
-		carteSurlignee = numeroCarte;
+		stockageSurlignee = numeroCarte;
 		repaint();
 	}
 	public void desactiverContours (){
-		carteSurlignee = -1;
+		stockageSurlignee = -1;
 		repaint();
 	}
 	
-	public void selectionnerCarte (int numeroCarte){
-		carteSelectionnee = numeroCarte;
+	public void selectionnerStock (int numeroCarte){
+		stockageSelectionnee = numeroCarte;
+		rangementSelectionnee = -1;
+		colonneSelectionnee = -1;
 		repaint();
 	}
-	public void deselectionnerCarte (){
-		carteSelectionnee = -1;
+	public void selectionnerRangement (int numeroCarte){
+		stockageSelectionnee = -1;
+		rangementSelectionnee = numeroCarte;
+		colonneSelectionnee = -1;
 		repaint();
 	}
-	
 	public void selectionnerColonne (int numeroColonne){
-		
+		stockageSelectionnee = -1;
+		rangementSelectionnee = -1;
+		colonneSelectionnee = numeroColonne;
+		repaint();
+	}
+	public void deselectionner (){
+		stockageSelectionnee = -1;
+		rangementSelectionnee = -1;
+		colonneSelectionnee = -1;
+		repaint();
 	}
 	
 	/*
@@ -187,22 +217,20 @@ public class Panneau_v2 extends JComponent{
 				dessinerCarteVide(crayon, coordX, coordY);
 			}
 		}
-		if ( carteSurlignee != -1 ){
-			coordX = decalageInitialX + carteSurlignee*(largeurCarte + 10);
-			coordY = decalageInitialY;
+		if ( stockageSurlignee != -1 ){
+			coordX = decalageInitialX + stockageSurlignee*(largeurCarte + ecartXsurCartes);
 			dessinerSurlignage(crayon, coordX, coordY);
 		}
-		if ( carteSelectionnee != -1 ){
-			coordX = decalageInitialX + carteSelectionnee*(largeurCarte + 10);
-			coordY = decalageInitialY;
+		if ( stockageSelectionnee != -1 ){
+			coordX = decalageInitialX + stockageSelectionnee*(largeurCarte + ecartXsurCartes);
 			dessinerSelection(crayon, coordX, coordY);
 		}
 		crayon.drawString(dimension, 10, 10);
 	}
 	private void dessinerRangement (Graphics2D crayon, Plateau referenceRangement){
 		coordX = decalageInitialX + engi.getZoneStockage().length()*(largeurCarte + ecartXsurCartes) + largeurCarte/2;
+		coordY = decalageInitialY;
 		for (int numeroColonne = 0; numeroColonne < referenceRangement.length(); numeroColonne++){
-			coordY = decalageInitialY;
 			
 			if ( !referenceRangement.getColonneAt(numeroColonne).isEmpty() ){
 				dessinerCarte(crayon, referenceRangement.getLastAt(numeroColonne), coordX, coordY);
@@ -212,18 +240,24 @@ public class Panneau_v2 extends JComponent{
 			}
 			coordX += (largeurCarte + ecartXsurCartes);
 		}
+		if ( rangementSurlignee != -1 ){
+			coordX = decalageInitialX + referenceRangement.length()*(largeurCarte + ecartXsurCartes) + largeurCarte/2 + rangementSurlignee*(largeurCarte + ecartXsurCartes);
+			dessinerSurlignage(crayon, coordX, coordY);
+		}
+		if ( rangementSelectionnee != -1 ){
+			coordX = decalageInitialX + referenceRangement.length()*(largeurCarte + ecartXsurCartes) + largeurCarte/2 + rangementSelectionnee*(largeurCarte + ecartXsurCartes);
+			dessinerSelection(crayon, coordX, coordY);
+		}
 		crayon.drawString(dimension, 10, 10);
 	}
 	private void dessinerZonePrincipale (Graphics2D crayon, Plateau referencePrincipale){
-		
 		for (int numeroColonne = 0; numeroColonne < referencePrincipale.length(); numeroColonne++){
+			coordX = decalageInitialX + ecartXPlateau + numeroColonne*(largeurCarte + ecartXsurCartes);
 			coordY = decalageInitialY + hauteurCarte + ecartYPlateau;
 			
 			ListIterator<Carte> iterateurColonne = referencePrincipale.getColonneAt(numeroColonne).listIterator();
 			
 			while ( iterateurColonne.hasNext() ){
-				coordX = decalageInitialX + ecartXPlateau + numeroColonne*(largeurCarte + ecartXsurCartes);
-				
 				if ( !referencePrincipale.getColonneAt(numeroColonne).isEmpty() ){
 					dessinerCarte(crayon, iterateurColonne.next(), coordX, coordY);
 				}
@@ -232,6 +266,22 @@ public class Panneau_v2 extends JComponent{
 				}
 				coordY += ecartYsurCartes;
 			}
+		}
+		if ( colonneSurlignee != -1 ){
+			int compteurCartes = referencePrincipale.getColonneAt(colonneSurlignee).isEmpty() ? 0 : referencePrincipale.getColonneAt(colonneSurlignee).size()-1;
+			
+			coordX = decalageInitialX + ecartXPlateau + colonneSurlignee*(largeurCarte + ecartXsurCartes);
+			coordY = decalageInitialY + hauteurCarte + ecartYPlateau + compteurCartes * ecartYsurCartes;
+			dessinerSurlignage(crayon, coordX, coordY);
+		}
+		if ( colonneSelectionnee != -1 ){
+			System.out.println("colonneSelectionnee : " + colonneSelectionnee);
+			
+			int compteurCartes = referencePrincipale.getColonneAt(colonneSelectionnee).isEmpty() ? 0 : referencePrincipale.getColonneAt(colonneSelectionnee).size()-1;
+			
+			coordX = decalageInitialX + ecartXPlateau + colonneSelectionnee*(largeurCarte + ecartXsurCartes);
+			coordY = decalageInitialY + hauteurCarte + ecartYPlateau + compteurCartes * ecartYsurCartes;
+			dessinerSelection(crayon, coordX, coordY);
 		}
 		crayon.drawString(dimension, 10, 10);
 	}	
@@ -244,12 +294,14 @@ public class Panneau_v2 extends JComponent{
 		crayon.setColor(Color.black);
 		crayon.drawRect(coordX,  coordY, largeurCarte, hauteurCarte);
 	}
+
 	private void dessinerSurlignage (Graphics2D crayon, int coordX, int coordY){
 		crayon.setColor(Color.black);
-		crayon.drawRect(coordX-1, coordY-1, Constantes.Panneau.largeurCarte+1, Constantes.Panneau.hauteurCarte+1);
+		crayon.drawRect(coordX-1, coordY-1, largeurCarte+1, hauteurCarte+1);
 	}
 	private void dessinerSelection (Graphics2D crayon, int coordX, int coordY){
 		crayon.setColor(Color.black);
-		crayon.drawRect(coordX-1, coordY-1, Constantes.Panneau.largeurCarte+1, Constantes.Panneau.hauteurCarte+1);
+		crayon.drawRect(coordX-1, coordY-1, largeurCarte+1, hauteurCarte+1);
 	}
+
 }

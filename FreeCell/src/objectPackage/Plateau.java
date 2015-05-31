@@ -9,8 +9,7 @@ import constantesPackage.Constantes;
 public class Plateau {
 	private Colonne[] plateau;
 	private Random generateur;
-	private int numeroColonneCourante;
-	private Carte carteCourante;
+	private Colonne colonneDeTransfert;
 	
 	/*
 	 * 1 CONSTRUCTEUR
@@ -24,20 +23,10 @@ public class Plateau {
 	 */
 	
 	/*
-	 * 2 ACCESSEURS
+	 * ACCESSEURS
 	 */
-	public int getNumeroColonneCourante (){
-		return numeroColonneCourante;
-	}
-	public Carte getCarteCourante (){
-		return carteCourante;
-	}
-	
-	public void setNumeroColonneCourante (int newColonneCourante){
-		numeroColonneCourante = newColonneCourante;
-	}
-	public void setCarteCourante (Carte newCarteCourante){
-		carteCourante = newCarteCourante.clone();
+	public Colonne getColonneTransfert (){
+		return colonneDeTransfert;
 	}
 	/*
 	 * FIN ACCESSEURS
@@ -58,17 +47,26 @@ public class Plateau {
 		}
 		
 	}
-	
 	public int length (){
 		return plateau.length;
 	}
-	
 	public Colonne getColonneAt (int indice){
 		return plateau[indice];
 	}
-	
 	public Carte getLastAt (int indice){
 		return plateau[indice].get(plateau[indice].size()-1);
+	}
+	public int nombreColonnesVides (){
+		int compteurColonnesVides = 0;
+		for (int indiceColonne = 0; indiceColonne < plateau.length; indiceColonne++){
+			if ( plateau[indiceColonne].isEmpty() ) {
+				compteurColonnesVides++;
+			}
+		}
+		return compteurColonnesVides;
+	}
+	public void clearTransfert (){
+		colonneDeTransfert = new Colonne();
 	}
 	
 	/*
@@ -78,6 +76,7 @@ public class Plateau {
 		for (int i = 0; i < plateau.length; i++){
 			plateau[i] = new Colonne();
 		}
+		colonneDeTransfert = new Colonne();
 	}
 	
 	/*
@@ -90,7 +89,6 @@ public class Plateau {
 		}
 		return renvoi;
 	}
-	
 	public String toString (){
 		String chaine_resultat = "Plateau : \n";
 		for (int i = 0; i < plateau.length; i++){
