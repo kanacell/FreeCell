@@ -23,17 +23,11 @@ public class MainClass implements Runnable{
 		PackCard paquet = new PackCard();
 		paquet.initialisation();
 		
-		principal.initialisation(0, paquet);
-		rangement.initialisation(0, paquet);
-		stockage.test();
+		principal.initialisation(paquet);
 		
 		Engine engi = new Engine (stockage, principal, rangement);
-		
-//		System.out.println(principal.toString());
-		System.out.println(rangement.toString());
 				
 		Fenetre fen = new Fenetre("FreeCell");
-//		fen.disposition(engi);
 		
 		fen.disposition_v2(engi);
 		

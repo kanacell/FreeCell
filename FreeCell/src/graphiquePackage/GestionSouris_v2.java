@@ -43,22 +43,25 @@ public class GestionSouris_v2 implements MouseListener, MouseMotionListener {
 				panneauDeJeu.deselectionner();
 			}
 		}
-		else if ( (numeroCarte = clicSurRangement(coordX, coordY)) != -1 ){
+		else if ( (numeroColonne = clicSurRangement(coordX, coordY)) != -1 ){
 			System.out.println("\tclic sur la zone de rangement");
-			panneauDeJeu.selectionnerRangement(numeroCarte);
-			engi.rangement();
+			panneauDeJeu.selectionnerRangement(numeroColonne);
+			if ( !engi.getCarteCourante().isEmpty() ){
+				engi.rangementDepuisStock(numeroColonne);
+			}
+			else if ( engi.getNumeroColonneCourante() != -1 ){
+				engi.rangementDepuisPlateau(numeroColonne);
+			}
+			panneauDeJeu.deselectionner();
 		}
 		else if ( (numeroColonne = clicSurPlateau(coordX, coordY)) != -1 ){
 			System.out.println("\tclic sur la zone du plateau");
 			panneauDeJeu.selectionnerColonne(numeroColonne);
 			
 			if ( engi.getNumeroColonneCourante() == -1 && engi.getCarteCourante().isEmpty() && !engi.getZonePrincipale().getColonneAt(numeroColonne).isEmpty() ){
-				System.out.println("carte courante et colonne courante vides");
 				engi.setNumeroColonneCourante(numeroColonne);
 			}
 			else if ( !engi.getCarteCourante().isEmpty() ){
-				System.out.println("carte courante non vide");
-				
 				engi.deplacementExterne(numeroColonne);
 /*				
 ou bien			engi.deplacement(engi.getCarteCourante(), numeroColonne);
@@ -66,8 +69,6 @@ ou bien			engi.deplacement(engi.getCarteCourante(), numeroColonne);
 				panneauDeJeu.deselectionner();
 			}
 			else if ( engi.getNumeroColonneCourante() != -1 ){
-				System.out.println("colonne courante non vide");
-				
 				engi.deplacementInterne(numeroColonne);
 				
 /*
@@ -81,10 +82,34 @@ ou bien			engi.deplacement(engi.getNumeroColonneCourante(), numeroColonne);
 			panneauDeJeu.deselectionner();
 			engi.setCarteCourante(new Carte());;
 			engi.setNumeroColonneCourante(-1);
+			if (e.getButton() == 3){
+				engi.rangementAutomatique();
+				panneauDeJeu.repaint();
+			}
+		}
+		if ( engi.partieGagnee() ){
+			System.out.println(" /!\\/!\\ Gagné /!\\/!\\ !");
 		}
 	}
 	
-	public void mouseMoved(MouseEvent e) {}
+	public void mouseMoved(MouseEvent e) {
+		int coordX = e.getPoint().x;
+		int coordY = e.getPoint().y;
+		int numeroCarte, numeroColonne;
+		
+		if ( (numeroCarte = clicSurStock(coordX,coordY)) != -1 ){
+			panneauDeJeu.surlignerStock(numeroCarte);
+		}
+		else if ( (numeroColonne = clicSurRangement(coordX, coordY)) != -1 ){
+			panneauDeJeu.surlignerRangement(numeroColonne);
+		}
+		else if ( (numeroColonne = clicSurPlateau(coordX, coordY)) != -1 ){
+			panneauDeJeu.surlignerColonne(numeroColonne);
+		}
+		else {
+			panneauDeJeu.desurligner();
+		}
+	}
 	public void mouseReleased(MouseEvent e) {}
 
 	public void mouseClicked(MouseEvent e) {}

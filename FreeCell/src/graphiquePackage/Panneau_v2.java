@@ -42,8 +42,6 @@ public class Panneau_v2 extends JComponent{
 	private int ecartYsurCartes; // = 25;
 	private int ecartXPlateau; // = 15;
 	private int ecartYPlateau; // = 20;
-	private int coordXCarteStockSelectionnee, coordYCarteStockSelectionnee;
-	private int coordXColonneSelectionnee, coordYColonneSelectionnee;
 	/*
 	 * FIN Attributs d'Entiers Graphiques
 	 */
@@ -113,19 +111,6 @@ public class Panneau_v2 extends JComponent{
 	public int getHauteurCarte (){
 		return hauteurCarte;
 	}
-	
-	public void setCoordXCarteSelectionnee (int newCoordXCarteSelection){
-		coordXCarteStockSelectionnee = newCoordXCarteSelection;
-	}
-	public void setCoordYCarteSelectionnee (int newCoordYCarteSelection){
-		coordYCarteStockSelectionnee = newCoordYCarteSelection;
-	}
-	public void setCoordXColonneSelectionnee (int newCoordXColonneSelectionnee){
-		coordXColonneSelectionnee = newCoordXColonneSelectionnee;
-	}
-	public void setCoordYColonneSelectionnee (int newCoordYColonneSelectionnee){
-		coordYColonneSelectionnee = newCoordYColonneSelectionnee;
-	}
 	/*
 	 * FIN ACCESSEURS
 	 */
@@ -180,9 +165,9 @@ public class Panneau_v2 extends JComponent{
 		colonneSelectionnee = -1;
 		repaint();
 	}
-	public void selectionnerRangement (int numeroCarte){
+	public void selectionnerRangement (int numeroColonne){
 		stockageSelectionnee = -1;
-		rangementSelectionnee = numeroCarte;
+		rangementSelectionnee = numeroColonne;
 		colonneSelectionnee = -1;
 		repaint();
 	}
@@ -196,6 +181,31 @@ public class Panneau_v2 extends JComponent{
 		stockageSelectionnee = -1;
 		rangementSelectionnee = -1;
 		colonneSelectionnee = -1;
+		repaint();
+	}
+	
+	public void surlignerStock (int numeroCarte){
+		stockageSurlignee = numeroCarte;
+		rangementSurlignee = -1;
+		colonneSurlignee = -1;
+		repaint();
+	}
+	public void surlignerRangement (int numeroColonne){
+		stockageSurlignee = -1;
+		rangementSurlignee = numeroColonne;
+		colonneSurlignee = -1;
+		repaint();
+	}
+	public void surlignerColonne (int numeroColonne){
+		stockageSurlignee = -1;
+		rangementSurlignee = -1;
+		colonneSurlignee = numeroColonne;
+		repaint();
+	}
+	public void desurligner (){
+		stockageSurlignee = -1;
+		rangementSurlignee = -1;
+		colonneSurlignee = -1;
 		repaint();
 	}
 	
@@ -255,16 +265,21 @@ public class Panneau_v2 extends JComponent{
 			coordX = decalageInitialX + ecartXPlateau + numeroColonne*(largeurCarte + ecartXsurCartes);
 			coordY = decalageInitialY + hauteurCarte + ecartYPlateau;
 			
-			ListIterator<Carte> iterateurColonne = referencePrincipale.getColonneAt(numeroColonne).listIterator();
-			
-			while ( iterateurColonne.hasNext() ){
-				if ( !referencePrincipale.getColonneAt(numeroColonne).isEmpty() ){
-					dessinerCarte(crayon, iterateurColonne.next(), coordX, coordY);
+			if ( referencePrincipale.getColonneAt(numeroColonne).isEmpty() ){
+				dessinerCarteVide(crayon, coordX, coordY);
+			}
+			else {
+				ListIterator<Carte> iterateurColonne = referencePrincipale.getColonneAt(numeroColonne).listIterator();
+				
+				while ( iterateurColonne.hasNext() ){
+					if ( !referencePrincipale.getColonneAt(numeroColonne).isEmpty() ){
+						dessinerCarte(crayon, iterateurColonne.next(), coordX, coordY);
+					}
+					else {
+						dessinerCarteVide(crayon, coordX, coordY);
+					}
+					coordY += ecartYsurCartes;
 				}
-				else {
-					dessinerCarteVide(crayon, coordX, coordY);
-				}
-				coordY += ecartYsurCartes;
 			}
 		}
 		if ( colonneSurlignee != -1 ){
@@ -275,7 +290,6 @@ public class Panneau_v2 extends JComponent{
 			dessinerSurlignage(crayon, coordX, coordY);
 		}
 		if ( colonneSelectionnee != -1 ){
-			System.out.println("colonneSelectionnee : " + colonneSelectionnee);
 			
 			int compteurCartes = referencePrincipale.getColonneAt(colonneSelectionnee).isEmpty() ? 0 : referencePrincipale.getColonneAt(colonneSelectionnee).size()-1;
 			

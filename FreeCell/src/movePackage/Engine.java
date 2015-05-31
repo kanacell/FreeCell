@@ -120,10 +120,48 @@ public class Engine {
 		}
 		carteCourante = new Carte();
 	}
-	public void rangement (){
-		
+	public void rangementDepuisStock (int colonneCible){
+		System.out.println("rangement depuis le stock");
+		if ( rangementPossibleDepuisStock(colonneCible) ){
+			System.out.println("rangement possible");
+			effectuerRangementDepuisStock(colonneCible);
+		}
+		else {
+			System.out.println("rangement impossible");
+		}
+		carteCourante = new Carte();
 	}
-
+	public void rangementDepuisPlateau (int colonneCible){
+		System.out.println("rangement depuis le plateau");
+		if ( rangementPossibleDepuisPlateau(colonneCible) ){
+			System.out.println("rangement possible");
+			effectuerRangementDepuisPlateau(colonneCible);
+		}
+		else {
+			System.out.println("rangement impossible");
+		}
+		numeroColonneCourante = -1;
+	}
+	public void rangementAutomatique (){
+		while ( rangementAutoStockPossible() || rangementAutoPlateauPossible() ){
+			if ( rangementAutoStockPossible() ){
+				effectuerRangementAutoStock();
+			}
+			if ( rangementAutoPlateauPossible() ){
+				effectuerRangementAutoPlateau();
+			}
+		}
+	}
+	
+	public boolean partieGagnee (){
+		boolean victoire = true;
+		int numeroColonne = 0; 
+		while ( numeroColonne < zoneRangement.length() && victoire){
+			victoire = zoneRangement.getColonneAt(numeroColonne).isEmpty() ? false : zoneRangement.getLastAt(numeroColonne).getValeur() == 13;
+			numeroColonne++;
+		}
+		return victoire;
+	}
 	
 	/*
 	 * Methodes Private de Engine
@@ -154,15 +192,10 @@ public class Engine {
 			
 			deplacementValide = carteSource.estAlterneeInferieure(carteDestination);
 			
-			System.out.println("\t avant boucle : ");
-			System.out.println("carteSource : " + carteSource.toString());
 			while ( !deplacementValide && compteurDeplacements < nbMaxDeplacements && iterateurColonneSource.hasPrevious() ){
 				Carte secondeCarte = carteSource;
 				carteSource = iterateurColonneSource.previous();;
 				compteurDeplacements++;
-				
-				System.out.println("cartes seconde/source : " + secondeCarte.toString() + " || " + carteSource.toString());
-				System.out.println("compteurs deplacement/Max : " + compteurDeplacements + " " + nbMaxDeplacements);
 				
 				deplacementValide = secondeCarte.estAlterneeInferieure(carteSource) && carteSource.estAlterneeInferieure(carteDestination);
 			}
@@ -181,13 +214,21 @@ public class Engine {
 			int nbMaxDeplacements = nbColonnesVides * (nbCartesVides + 1);
 			int compteurCartes = 0;
 			
-			ListIterator<Carte> iterateurColonneSource = zonePrincipale.getColonneAt(numeroColonneCourante).listIterator(zonePrincipale.getColonneAt(numeroColonneCourante).size());
-			while ( compteurCartes < nbMaxDeplacements && iterateurColonneSource.hasPrevious() ){
-				Carte transfert = iterateurColonneSource.previous();
-				zonePrincipale.getColonneAt(colonneCible).add(0, transfert.clone());
-				zonePrincipale.getColonneAt(numeroColonneCourante).remove(transfert);
-				compteurCartes++;
+			Carte transfert = zonePrincipale.getLastAt(numeroColonneCourante);
+			zonePrincipale.getColonneTransfert().add(0, transfert.clone());
+			zonePrincipale.getColonneAt(numeroColonneCourante).remove(transfert);
+			compteurCartes++;
+			
+			if ( !zonePrincipale.getColonneAt(numeroColonneCourante).isEmpty() ){
+				transfert = zonePrincipale.getLastAt(numeroColonneCourante);
+				while ( compteurCartes < nbMaxDeplacements && zonePrincipale.getColonneTransfert().first().estAlterneeInferieure(transfert) ) {
+					zonePrincipale.getColonneTransfert().add(0, transfert.clone());
+					zonePrincipale.getColonneAt(numeroColonneCourante).remove(transfert);
+					compteurCartes++;
+					transfert = zonePrincipale.getLastAt(numeroColonneCourante);
+				}
 			}
+			zonePrincipale.getColonneAt(colonneCible).addAll(zonePrincipale.getColonneTransfert());
 		}
 		else {
 			int indexAjout = zonePrincipale.getColonneAt(colonneCible).size();
@@ -202,9 +243,8 @@ public class Engine {
 			zonePrincipale.getColonneTransfert().add(0, carteSource.clone());
 			zonePrincipale.getColonneAt(numeroColonneCourante).remove(carteSource);
 			zonePrincipale.getColonneAt(colonneCible).addAll(indexAjout, zonePrincipale.getColonneTransfert());
-			zonePrincipale.clearTransfert();
 		}
-		
+		zonePrincipale.clearTransfert();
 	}
 	
 	private boolean stockagePossible (int numeroCarteCible){
@@ -220,6 +260,113 @@ public class Engine {
 		carteCourante.clear();
 	}
 	
-	
-	
+	private boolean rangementPossibleDepuisStock (int colonneCible){
+		boolean rangementValide;
+		if ( zoneRangement.getColonneAt(colonneCible).isEmpty() ){
+			rangementValide = carteCourante.getValeur() == 1;
+		}
+		else {
+			rangementValide = zoneRangement.getLastAt(colonneCible).estConsecutive(carteCourante);
+		}
+		return rangementValide;
+	}
+	private boolean rangementPossibleDepuisPlateau (int colonneCible){
+		boolean rangementValide;
+		if ( zoneRangement.getColonneAt(colonneCible).isEmpty() ){
+			rangementValide = zonePrincipale.getLastAt(numeroColonneCourante).getValeur() == 1;
+		}
+		else {
+			rangementValide = zoneRangement.getLastAt(colonneCible).estConsecutive(zonePrincipale.getLastAt(numeroColonneCourante));
+		}
+		return rangementValide;
+	}
+	private void effectuerRangementDepuisStock (int colonneCible){
+		Carte transfert = carteCourante;
+		zoneRangement.getColonneAt(colonneCible).add(transfert.clone());
+		carteCourante.clear();
+	}
+	private void effectuerRangementDepuisPlateau (int colonneCible){
+		Carte transfert = zonePrincipale.getLastAt(numeroColonneCourante);
+		zoneRangement.getColonneAt(colonneCible).add(transfert.clone());
+		zonePrincipale.getColonneAt(numeroColonneCourante).remove(transfert);
+	}
+
+	private boolean rangementAutoStockPossible (){
+		boolean rangementValide = false;
+		int numeroCarte = 0;
+		while (numeroCarte < zoneStockage.length() && !rangementValide){
+			int numeroColonne = 0;
+			while (numeroColonne < zoneRangement.length() && !rangementValide){
+				if ( !zoneRangement.getColonneAt(numeroColonne).isEmpty() ){
+					rangementValide = zoneRangement.getLastAt(numeroColonne).estConsecutive(zoneStockage.getCarteAt(numeroCarte));
+				}
+				else {
+					rangementValide = zoneStockage.getCarteAt(numeroCarte).getValeur() == 1;
+				}
+				numeroColonne++;
+			}
+			numeroCarte++;
+		}
+		return rangementValide;
+	}
+	private boolean rangementAutoPlateauPossible (){
+		boolean rangementValide = false;
+		int numeroColonnePlateau = 0;
+		while (numeroColonnePlateau < zonePrincipale.length() && !rangementValide){
+			int numeroColonneRangement = 0;
+			while (numeroColonneRangement < zoneRangement.length() && !rangementValide){
+				if ( !zonePrincipale.getColonneAt(numeroColonnePlateau).isEmpty() ){
+					if ( !zoneRangement.getColonneAt(numeroColonneRangement).isEmpty() ){
+						rangementValide = zoneRangement.getLastAt(numeroColonneRangement).estConsecutive(zonePrincipale.getLastAt(numeroColonnePlateau));
+					}
+					else {
+						rangementValide = zonePrincipale.getLastAt(numeroColonnePlateau).getValeur() == 1;
+					}
+				}
+				numeroColonneRangement++;
+			}
+			numeroColonnePlateau++;
+		}
+		return rangementValide;
+	}
+	private void effectuerRangementAutoStock (){
+		for (int numeroCarte = 0; numeroCarte < zoneStockage.length(); numeroCarte++){
+			for (int numeroColonneRangement = 0; numeroColonneRangement < zoneRangement.length(); numeroColonneRangement++){
+				Carte transfert = zoneStockage.getCarteAt(numeroCarte);
+				if ( zoneRangement.getColonneAt(numeroColonneRangement).isEmpty() ){
+					if ( transfert.getValeur() == 1 ){
+						zoneRangement.getColonneAt(numeroColonneRangement).add(transfert.clone());
+						zoneStockage.putCarteAt(numeroCarte, new Carte());
+					}
+				}
+				else {
+					if ( zoneRangement.getLastAt(numeroColonneRangement).estConsecutive(transfert) ){
+						zoneRangement.getColonneAt(numeroColonneRangement).add(transfert.clone());
+						zoneStockage.putCarteAt(numeroCarte, new Carte());
+					} 
+				}
+			}
+		}
+	}
+	private void effectuerRangementAutoPlateau (){
+		for (int numeroColonnePlateau = 0; numeroColonnePlateau < zonePrincipale.length(); numeroColonnePlateau++){
+			for (int numeroColonneRangement = 0; numeroColonneRangement < zoneRangement.length(); numeroColonneRangement++){
+				if ( !zonePrincipale.getColonneAt(numeroColonnePlateau).isEmpty() ){
+					Carte transfert = zonePrincipale.getLastAt(numeroColonnePlateau);
+					if ( zoneRangement.getColonneAt(numeroColonneRangement).isEmpty() ){
+						if ( transfert.getValeur() == 1 ) {
+							zoneRangement.getColonneAt(numeroColonneRangement).add(transfert.clone());
+							zonePrincipale.getColonneAt(numeroColonnePlateau).remove(transfert);
+						}
+					}
+					else {
+						if ( zoneRangement.getLastAt(numeroColonneRangement).estConsecutive(transfert) ){
+							zoneRangement.getColonneAt(numeroColonneRangement).add(transfert.clone());
+							zonePrincipale.getColonneAt(numeroColonnePlateau).remove(transfert);
+						}
+					}
+				}
+			}
+		}
+	}
 }

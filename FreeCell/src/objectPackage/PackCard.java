@@ -40,7 +40,6 @@ public class PackCard extends ArrayList<Carte>{
 		}
 		return renvoi;
 	}
-	
 	public String toString (){
 		String chaine_resultat = "PackCard : { ";
 		ListIterator<Carte> iterateurPackCard = this.listIterator();

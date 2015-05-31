@@ -114,7 +114,6 @@ public class Carte {
 		identique = this.valeur == otherCarte.getValeur() && this.famille.equals(otherCarte.getFamille()) && this.couleur.equals(otherCarte.getCouleur());
 		return identique;
 	}
-	
 	public String toString (){
 		String chaine_resultat = "";
 		chaine_resultat += this.valeur + " ";
@@ -122,7 +121,6 @@ public class Carte {
 		chaine_resultat += this.couleur;
 		return chaine_resultat;
 	}
-	
 	public Carte clone (){
 		Carte renvoi = new Carte();
 		renvoi.valeur = this.valeur;

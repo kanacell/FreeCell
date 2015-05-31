@@ -35,8 +35,8 @@ public class Plateau {
 	/*
 	 * Methodes Public de l'objet
 	 */
-	public void initialisation (int seed, PackCard paquet){
-		generateur = new Random(seed);
+	public void initialisation (PackCard paquet){
+		generateur = new Random();
 		PackCard packTampon = paquet.clone();
 		int numeroColonne = 0;
 		while ( !packTampon.isEmpty() ){
@@ -109,6 +109,10 @@ public class Plateau {
 			super();
 		}
 		
+		public Carte first (){
+			return this.get(0);
+		}
+		
 		public String toString (){
 			String chaine_resultat = "Colonne : { ";
 			ListIterator<Carte> iterateurColonne = this.listIterator();
@@ -118,7 +122,6 @@ public class Plateau {
 			chaine_resultat += "}\n";
 			return chaine_resultat;
 		}
-		
 		public boolean equals (Colonne otherColonne){
 			boolean identique;
 			identique = ( this.size() == otherColonne.size() );
@@ -128,7 +131,6 @@ public class Plateau {
 			}
 			return identique;
 		}
-		
 		public Colonne clone (){
 			Colonne renvoi = new Colonne();
 			renvoi.addAll(this);
