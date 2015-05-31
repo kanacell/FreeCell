@@ -4,6 +4,7 @@ import graphiquePackage.Fenetre;
 
 import javax.swing.SwingUtilities;
 
+import constantesPackage.Constantes;
 import movePackage.Engine;
 import objectPackage.PackCard;
 import objectPackage.Plateau;
@@ -18,17 +19,12 @@ public class MainClass implements Runnable{
 	
 	public void run (){
 		Stock stockage = new Stock();
-		Plateau principal = new Plateau(8);
-		Plateau rangement = new Plateau(4);
+		Plateau principal = new Plateau(Constantes.Plateau.nombreColonnes);
+		Plateau rangement = new Plateau(Constantes.Plateau.nombreFamilles);
 		PackCard paquet = new PackCard();
-		paquet.initialisation();
 		
-		principal.initialisation(paquet);
-		
-		Engine engi = new Engine (stockage, principal, rangement);
-				
+		Engine engi = new Engine (stockage, principal, rangement, paquet);
 		Fenetre fen = new Fenetre("FreeCell");
-		
 		fen.disposition_v2(engi);
 		
 	}

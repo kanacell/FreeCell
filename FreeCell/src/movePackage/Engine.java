@@ -2,7 +2,9 @@ package movePackage;
 
 import java.util.ListIterator;
 
+import constantesPackage.Constantes;
 import objectPackage.Carte;
+import objectPackage.PackCard;
 import objectPackage.Plateau;
 import objectPackage.Stock;
 
@@ -10,6 +12,8 @@ public class Engine {
 	private Plateau zonePrincipale;
 	private Plateau zoneRangement;
 	private Stock zoneStockage;
+	private PackCard paquet;
+	
 	private int numeroColonneCourante;
 	private Carte carteCourante;
 	private int typePanneauDepart;
@@ -17,13 +21,18 @@ public class Engine {
 	/*
 	 * CONSTRUCTEURS
 	 */
-	public Engine (Stock referenceStockage, Plateau referencePlateau, Plateau referenceRangement){
+	public Engine (Stock referenceStockage, Plateau referencePlateau, Plateau referenceRangement, PackCard referencePaquet){
 		zonePrincipale = referencePlateau;
 		zoneRangement = referenceRangement;
 		zoneStockage = referenceStockage;
+		paquet = referencePaquet;
+		
 		numeroColonneCourante = -1;
 		typePanneauDepart = -1;
 		carteCourante = new Carte();
+		
+		paquet.initialisation();
+		zonePrincipale.initialisation(paquet);
 	}
 	/*
 	 * FIN CONSTRUCTEURS
@@ -76,6 +85,18 @@ public class Engine {
 	/*
 	 * Methodes Public de Engine
 	 */
+	public void nouvellePartie (){
+		zonePrincipale = new Plateau(Constantes.Plateau.nombreColonnes);
+		zonePrincipale.initialisation(paquet);
+		zoneStockage = new Stock();
+		zoneRangement = new Plateau(Constantes.Plateau.nombreFamilles);
+	}
+	public void nouvellePartie (int numeroPartie){
+		zonePrincipale = new Plateau(Constantes.Plateau.nombreColonnes);
+		zonePrincipale.initialisation(numeroPartie, paquet);
+		zoneStockage = new Stock();
+		zoneRangement = new Plateau(Constantes.Plateau.nombreFamilles);
+	}
 	public void deplacementExterne (int colonneCible){
 		System.out.println("deplacement du stock vers une colonne");
 		if ( deplacementExternePossible(colonneCible) ){

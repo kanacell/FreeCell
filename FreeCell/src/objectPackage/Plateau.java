@@ -45,7 +45,17 @@ public class Plateau {
 			packTampon.remove(indice);
 			numeroColonne = (numeroColonne+1) % plateau.length;
 		}
-		
+	}
+	public void initialisation ( int seed, PackCard paquet){
+		generateur = new Random(seed);
+		PackCard packTampon = paquet.clone();
+		int numeroColonne = 0;
+		while ( !packTampon.isEmpty() ){
+			int indice = generateur.nextInt(packTampon.size());
+			plateau[numeroColonne].add(packTampon.get(indice));
+			packTampon.remove(indice);
+			numeroColonne = (numeroColonne+1) % plateau.length;
+		}
 	}
 	public int length (){
 		return plateau.length;
