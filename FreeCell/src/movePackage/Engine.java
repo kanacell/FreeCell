@@ -81,12 +81,11 @@ public class Engine {
 		if ( deplacementExternePossible(colonneCible) ){
 			System.out.println("deplacement externe possible");
 			effectuerDeplacementExterne(colonneCible);
-			carteCourante.clear();
 		}
 		else {
 			System.out.println("deplacement externe impossible");
 		}
-		carteCourante = new Carte();
+		carteCourante.clear();
 	}
 	public void deplacementInterne (int colonneCible){
 		System.out.println("deplacement d'une colonne vers une autre");
@@ -99,17 +98,32 @@ public class Engine {
 		}
 		numeroColonneCourante = -1;
 	}
+	public void stockageExterne (int numeroCarteCible){
+		System.out.println("stockage d'une colonne vers le stock");
+		if ( stockagePossible(numeroCarteCible) ){
+			System.out.println("stockage possible");
+			effectuerStockageExterne(numeroCarteCible);
+		}
+		else {
+			System.out.println("stockage impossible");
+		}
+		numeroColonneCourante = -1;
+	}
+	public void stockageInterne (int numeroCarteCible){
+		System.out.println("stockage du stock vers lui meme");
+		if ( stockagePossible(numeroCarteCible) ){
+			System.out.println("stockage possible");
+			effectuerStockageInterne(numeroCarteCible);
+		}
+		else {
+			System.out.println("stockage impossible");
+		}
+		carteCourante = new Carte();
+	}
 	public void rangement (){
 		
 	}
 
-/*
-	public void ajouterCarte (Carte referenceCarte, int colonneCible){
-		Carte transfert = referenceCarte.clone();
-		zonePrincipale.getColonneAt(colonneCible).add(transfert);
-		referenceCarte.clear();
-	}
-*/
 	
 	/*
 	 * Methodes Private de Engine
@@ -136,7 +150,7 @@ public class Engine {
 			int nbColonnesVides = zonePrincipale.nombreColonnesVides();
 			int nbCartesVides = zoneStockage.nombreCasesVides();
 			int nbMaxDeplacements = (nbColonnesVides + 1) * (nbCartesVides + 1);
-			int compteurDeplacements = 0;
+			int compteurDeplacements = 1;
 			
 			deplacementValide = carteSource.estAlterneeInferieure(carteDestination);
 			
@@ -155,7 +169,7 @@ public class Engine {
 		}
 		
 		return deplacementValide;
-	}
+	}	
 	private void effectuerDeplacementExterne (int colonneCible){
 		Carte transfert = carteCourante.clone();
 		zonePrincipale.getColonneAt(colonneCible).add(transfert);
@@ -192,4 +206,20 @@ public class Engine {
 		}
 		
 	}
+	
+	private boolean stockagePossible (int numeroCarteCible){
+		return zoneStockage.getCarteAt(numeroCarteCible).isEmpty();
+	}
+	private void effectuerStockageExterne (int numeroCarteCible){
+		Carte transfert = zonePrincipale.getLastAt(numeroColonneCourante);
+		zoneStockage.putCarteAt(numeroCarteCible, transfert.clone());
+		zonePrincipale.getColonneAt(numeroColonneCourante).remove(transfert);
+	}
+	private void effectuerStockageInterne (int numeroCarteCible){
+		zoneStockage.putCarteAt(numeroCarteCible, carteCourante.clone());
+		carteCourante.clear();
+	}
+	
+	
+	
 }

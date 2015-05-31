@@ -78,8 +78,7 @@ public class Carte {
 		boolean alternee;
 		alternee = (this.valeur+1) == otherCarte.getValeur() && !this.couleur.equals(otherCarte.getCouleur());
 		return alternee;
-	}
-	
+	}	
 	/**
 	 * Methode permettant de savoir si la Carte appelante est la consécutive de la carte donnee
 	 * en parametre
@@ -91,13 +90,11 @@ public class Carte {
 		consecutive = (this.valeur+1) == otherCarte.getValeur() && this.famille.equals(otherCarte.getFamille());
 		return consecutive;
 	}
-	
 	public boolean isEmpty (){
 		boolean vide = false;
 		vide = (valeur == 0) && famille.equals(Constantes.Carte.Famille.nul) && couleur.equals(Constantes.Carte.Couleur.blanche);
 		return vide;
-	}
-	
+	}	
 	public void clear (){
 		valeur = 0;
 		famille = Constantes.Carte.Famille.nul;

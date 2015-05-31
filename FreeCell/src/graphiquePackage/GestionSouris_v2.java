@@ -30,13 +30,18 @@ public class GestionSouris_v2 implements MouseListener, MouseMotionListener {
 		
 		if ( (numeroCarte = clicSurStock(coordX,coordY)) != -1 ){
 			System.out.println("\tclic sur la zone de stockage");
-			panneauDeJeu.selectionnerStock(numeroCarte);
-			if ( false ){
-				
+			if ( engi.getCarteCourante().isEmpty() && engi.getNumeroColonneCourante() == -1 && !engi.getZoneStockage().getCarteAt(numeroCarte).isEmpty() ){
+				engi.setCarteCourante( engi.getZoneStockage().getCarteAt(numeroCarte) );
+				panneauDeJeu.selectionnerStock(numeroCarte);
 			}
-			engi.setCarteCourante( engi.getZoneStockage().getCarteAt(numeroCarte) );
-			System.out.println("carte courante : " + engi.getCarteCourante());
-			
+			else if ( !engi.getCarteCourante().isEmpty() ){
+				engi.stockageInterne(numeroCarte);
+				panneauDeJeu.deselectionner();
+			}
+			else if ( engi.getNumeroColonneCourante() != -1 ){
+				engi.stockageExterne(numeroCarte);
+				panneauDeJeu.deselectionner();
+			}
 		}
 		else if ( (numeroCarte = clicSurRangement(coordX, coordY)) != -1 ){
 			System.out.println("\tclic sur la zone de rangement");
@@ -47,14 +52,12 @@ public class GestionSouris_v2 implements MouseListener, MouseMotionListener {
 			System.out.println("\tclic sur la zone du plateau");
 			panneauDeJeu.selectionnerColonne(numeroColonne);
 			
-			if ( engi.getNumeroColonneCourante() == -1 && engi.getCarteCourante().isEmpty() ){
+			if ( engi.getNumeroColonneCourante() == -1 && engi.getCarteCourante().isEmpty() && !engi.getZonePrincipale().getColonneAt(numeroColonne).isEmpty() ){
 				System.out.println("carte courante et colonne courante vides");
 				engi.setNumeroColonneCourante(numeroColonne);
 			}
 			else if ( !engi.getCarteCourante().isEmpty() ){
 				System.out.println("carte courante non vide");
-				
-//				engi.ajouterCarte(engi.getCarteCourante(), numeroColonne);
 				
 				engi.deplacementExterne(numeroColonne);
 /*				
