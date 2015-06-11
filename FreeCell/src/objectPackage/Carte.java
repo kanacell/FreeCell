@@ -1,6 +1,8 @@
 package objectPackage;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 
 import constantesPackage.Constantes;
 
@@ -101,6 +103,13 @@ public class Carte {
 		couleur = Constantes.Carte.Couleur.blanche;
 		imageCarte = null;
 	}
+	public BufferedImage copierImage() {
+		BufferedImage imageACopier = this.getImage();
+		ColorModel cm = imageACopier.getColorModel();
+		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		WritableRaster raster = imageACopier.copyData(null);
+		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+	}
 	
 	/*
 	 * FIN Methodes Public de Carte
@@ -127,7 +136,7 @@ public class Carte {
 		renvoi.valeur = this.valeur;
 		renvoi.famille = this.famille;
 		renvoi.couleur = this.couleur;
-		renvoi.imageCarte = this.imageCarte;
+		renvoi.imageCarte = this.copierImage();
 		return renvoi;
 	}
 }
